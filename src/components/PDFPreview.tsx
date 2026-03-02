@@ -56,11 +56,13 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
       if (!completionSent.current) {
         completionSent.current = true;
         try {
-          if (investorId && !hasBeenCompleted(investorId)) {
-            markAsCompleted(investorId);
-            await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
+          const id = investorId || formData.name || 'anonymous';
+          const name = investorName || formData.name || 'Anonymous';
+          if (!hasBeenCompleted(id)) {
+            markAsCompleted(id);
           }
-          const submitterName = formData.name || investorName || 'Anonymous';
+          await notifyFormCompleted(id, name, formData as any, pdfBytes);
+          const submitterName = formData.name || name;
           const emailSent = await sendW9Email(submitterName, formData as any, pdfBytes);
           if (!emailSent) {
             setEmailError('Failed to send email. The form was downloaded but the email could not be sent.');

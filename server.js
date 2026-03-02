@@ -9,6 +9,7 @@ const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 
 app.use(cors({
   origin: [
+    'https://matheus1211hanemann.github.io',
     'http://localhost:5173',
     'http://localhost:3000',
   ],
@@ -66,8 +67,8 @@ app.post('/api/send-w9-email', async (req, res) => {
     });
   }
 
-  const recipientEmails = (process.env.W9_RECIPIENT_EMAIL || 'your-email@example.com').split(',').map(e => e.trim());
-  const fromAddress = process.env.EMAIL_FROM || 'W9 Forms <w9@yourdomain.com>';
+  const recipientEmails = (process.env.W9_RECIPIENT_EMAIL || 'matheus@cs3investments.com').split(',').map(e => e.trim());
+  const fromAddress = process.env.EMAIL_FROM || 'W9 Forms <onboarding@resend.dev>';
 
   try {
     const response = await fetch('https://api.resend.com/emails', {
