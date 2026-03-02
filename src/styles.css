@@ -1,0 +1,1153 @@
+/* W9 Form Widget Styles */
+
+/* Import Google Font for cursive signature */
+@import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400;700&display=swap');
+
+/* ============================================
+   CSS Variables (Customizable)
+   ============================================ */
+:root {
+  /* CS3 Investments Brand Colors */
+  --w9-primary-color: #F7A11A;
+  --w9-primary-hover: #FFA100;
+  --w9-secondary-color: #2c3345;
+  --w9-success-color: #37ca37;
+  --w9-error-color: #e93d3d;
+  --w9-border-color: #cbd5e0;
+  --w9-bg-color: #ffffff;
+  --w9-text-color: #2c3345;
+  --w9-text-muted: #5a6c7d;
+  --w9-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+  --w9-border-radius: 8px;
+  --w9-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  --w9-shadow-lg: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+}
+
+/* ============================================
+   Base Widget Container
+   ============================================ */
+.w9-widget {
+  font-family: var(--w9-font-family);
+  color: var(--w9-text-color);
+  background: var(--w9-bg-color);
+  border-radius: var(--w9-border-radius);
+  box-shadow: var(--w9-shadow-lg);
+  max-width: 700px;
+  margin: 0 auto;
+  padding: 24px;
+  box-sizing: border-box;
+}
+
+.w9-widget * {
+  box-sizing: border-box;
+}
+
+/* ============================================
+   Logo
+   ============================================ */
+.w9-logo {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.w9-logo img {
+  max-width: 200px;
+  height: auto;
+}
+
+/* ============================================
+   Progress Steps
+   ============================================ */
+.w9-progress {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 32px;
+  padding: 0 16px;
+}
+
+.w9-progress-step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  position: relative;
+}
+
+.w9-progress-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 16px;
+  left: 60%;
+  width: 80%;
+  height: 2px;
+  background: var(--w9-border-color);
+}
+
+.w9-progress-step.completed:not(:last-child)::after {
+  background: var(--w9-success-color);
+}
+
+.w9-progress-number {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--w9-border-color);
+  color: var(--w9-text-muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+  font-size: 14px;
+  margin-bottom: 8px;
+  position: relative;
+  z-index: 1;
+  transition: all 0.3s ease;
+}
+
+.w9-progress-step.active .w9-progress-number {
+  background: var(--w9-primary-color);
+  color: white;
+}
+
+.w9-progress-step.completed .w9-progress-number {
+  background: var(--w9-success-color);
+  color: white;
+}
+
+.w9-progress-label {
+  font-size: 12px;
+  color: var(--w9-text-muted);
+  text-align: center;
+}
+
+.w9-progress-step.active .w9-progress-label {
+  color: var(--w9-primary-color);
+  font-weight: 600;
+}
+
+/* ============================================
+   Step Header
+   ============================================ */
+.w9-step-header {
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.w9-step-title {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 8px 0;
+  color: var(--w9-text-color);
+}
+
+.w9-step-description {
+  color: var(--w9-text-muted);
+  margin: 0;
+  font-size: 14px;
+}
+
+/* ============================================
+   Form Elements
+   ============================================ */
+.w9-form-group {
+  margin-bottom: 20px;
+}
+
+.w9-form-row {
+  display: flex;
+  gap: 16px;
+}
+
+.w9-form-group-half {
+  flex: 1;
+}
+
+.w9-form-group-quarter {
+  flex: 0.5;
+}
+
+.w9-label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 6px;
+  font-size: 14px;
+  color: var(--w9-text-color);
+}
+
+.w9-required {
+  color: var(--w9-error-color);
+}
+
+.w9-help-text {
+  font-size: 12px;
+  color: var(--w9-text-muted);
+  margin: 0 0 8px 0;
+}
+
+.w9-input,
+.w9-select {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  font-size: 14px;
+  font-family: inherit;
+  transition: border-color 0.2s, box-shadow 0.2s;
+  background: white;
+}
+
+.w9-input:focus,
+.w9-select:focus {
+  outline: none;
+  border-color: var(--w9-primary-color);
+  box-shadow: 0 0 0 3px rgba(37, 99, 235, 0.1);
+}
+
+.w9-input-error {
+  border-color: var(--w9-error-color) !important;
+}
+
+.w9-input-error:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.1);
+}
+
+.w9-error-message {
+  display: block;
+  color: var(--w9-error-color);
+  font-size: 12px;
+  margin-top: 6px;
+}
+
+.w9-input-tin {
+  font-family: 'SF Mono', 'Monaco', 'Inconsolata', 'Fira Mono', monospace;
+  letter-spacing: 2px;
+}
+
+/* ============================================
+   Radio & Checkbox Groups
+   ============================================ */
+.w9-radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.w9-radio-group-horizontal {
+  flex-direction: row;
+  flex-wrap: wrap;
+}
+
+.w9-radio-label {
+  display: flex;
+  align-items: flex-start;
+  cursor: pointer;
+  padding: 10px 14px;
+  border: 1px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  transition: all 0.2s;
+}
+
+.w9-radio-label:hover {
+  border-color: var(--w9-primary-color);
+  background: rgba(37, 99, 235, 0.02);
+}
+
+.w9-radio-label:has(.w9-radio:checked) {
+  border-color: var(--w9-primary-color);
+  background: rgba(37, 99, 235, 0.05);
+}
+
+.w9-radio {
+  margin-right: 10px;
+  margin-top: 2px;
+  accent-color: var(--w9-primary-color);
+}
+
+.w9-radio-text {
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+/* ============================================
+   TIN Toggle
+   ============================================ */
+.w9-tin-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.w9-tin-toggle-btn {
+  flex: 1;
+  padding: 12px 16px;
+  border: 2px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.w9-tin-toggle-btn:hover {
+  border-color: var(--w9-primary-color);
+}
+
+.w9-tin-toggle-btn.active {
+  border-color: var(--w9-primary-color);
+  background: var(--w9-primary-color);
+  color: white;
+}
+
+/* ============================================
+   Sections
+   ============================================ */
+.w9-section {
+  margin-bottom: 28px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--w9-border-color);
+}
+
+.w9-section:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.w9-section-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0 0 16px 0;
+  color: var(--w9-text-color);
+}
+
+.w9-section-optional {
+  opacity: 0.8;
+}
+
+.w9-conditional-field {
+  background: rgba(37, 99, 235, 0.03);
+  padding: 16px;
+  border-radius: var(--w9-border-radius);
+  border-left: 3px solid var(--w9-primary-color);
+  margin-top: 16px;
+}
+
+/* ============================================
+   Signature Component
+   ============================================ */
+.w9-signature-mode-toggle {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.w9-mode-btn {
+  flex: 1;
+  padding: 10px 16px;
+  border: 2px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  background: white;
+  cursor: pointer;
+  font-size: 14px;
+  font-family: inherit;
+  transition: all 0.2s;
+}
+
+.w9-mode-btn:hover {
+  border-color: var(--w9-primary-color);
+}
+
+.w9-mode-btn.active {
+  border-color: var(--w9-primary-color);
+  background: rgba(37, 99, 235, 0.05);
+  color: var(--w9-primary-color);
+}
+
+.w9-signature-drawn {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.w9-signature-canvas {
+  width: 100%;
+  height: 150px;
+  border: 2px dashed var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  cursor: crosshair;
+  touch-action: none;
+}
+
+.w9-signature-canvas.w9-input-error {
+  border-color: var(--w9-error-color);
+}
+
+.w9-btn-clear {
+  align-self: flex-start;
+  padding: 8px 16px;
+  border: 1px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  background: white;
+  cursor: pointer;
+  font-size: 13px;
+  font-family: inherit;
+  color: var(--w9-text-muted);
+  transition: all 0.2s;
+}
+
+.w9-btn-clear:hover {
+  border-color: var(--w9-error-color);
+  color: var(--w9-error-color);
+}
+
+.w9-signature-typed {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.w9-signature-input {
+  font-size: 16px;
+}
+
+.w9-signature-preview {
+  padding: 20px;
+  background: #fafafa;
+  border-radius: var(--w9-border-radius);
+  text-align: center;
+}
+
+.w9-signature-typed-display {
+  font-family: 'Dancing Script', 'Brush Script MT', 'Segoe Script', cursive;
+  font-size: 36px;
+  font-weight: 700;
+  color: #1a365d;
+  letter-spacing: 1px;
+}
+
+.w9-input-date {
+  max-width: 200px;
+}
+
+/* ============================================
+   Certification Text
+   ============================================ */
+.w9-certification-text {
+  background: #f8fafc;
+  padding: 16px;
+  border-radius: var(--w9-border-radius);
+  font-size: 12px;
+  line-height: 1.6;
+  color: var(--w9-text-muted);
+  margin-bottom: 20px;
+}
+
+.w9-certification-text p {
+  margin: 0 0 8px 0;
+  font-weight: 600;
+}
+
+.w9-certification-text ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.w9-certification-text li {
+  margin-bottom: 6px;
+}
+
+/* ============================================
+   Navigation Buttons
+   ============================================ */
+.w9-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 32px;
+  padding-top: 24px;
+  border-top: 1px solid var(--w9-border-color);
+}
+
+.w9-btn {
+  padding: 12px 24px;
+  border-radius: var(--w9-border-radius);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: inherit;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.w9-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.w9-btn-primary {
+  background: var(--w9-primary-color);
+  color: white;
+}
+
+.w9-btn-primary:hover:not(:disabled) {
+  background: var(--w9-primary-hover);
+}
+
+.w9-btn-secondary {
+  background: white;
+  color: var(--w9-text-color);
+  border: 1px solid var(--w9-border-color);
+}
+
+.w9-btn-secondary:hover:not(:disabled) {
+  border-color: var(--w9-secondary-color);
+  background: #f8fafc;
+}
+
+/* Test Data Button (for development) */
+.w9-btn-test-data {
+  padding: 6px 12px;
+  font-size: 13px;
+  background: #f0fdf4;
+  color: #15803d;
+  border: 1px solid #86efac;
+  border-radius: 6px;
+  cursor: pointer;
+  font-weight: 500;
+  transition: all 0.2s;
+  font-family: var(--w9-font-family);
+}
+
+.w9-btn-test-data:hover {
+  background: #dcfce7;
+  border-color: #4ade80;
+}
+
+/* ============================================
+   Preview Component
+   ============================================ */
+.w9-preview {
+  padding: 0;
+}
+
+.w9-preview-header {
+  text-align: center;
+  margin-bottom: 24px;
+}
+
+.w9-preview-header h2 {
+  font-size: 24px;
+  margin: 0 0 8px 0;
+}
+
+.w9-preview-header p {
+  color: var(--w9-text-muted);
+  margin: 0;
+}
+
+.w9-preview-frame-container {
+  border: 1px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  overflow: hidden;
+  margin-bottom: 24px;
+  background: #f8fafc;
+}
+
+.w9-pdf-document {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+  background: #525659;
+}
+
+.w9-pdf-page {
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  background: white;
+}
+
+.w9-pdf-page canvas {
+  display: block;
+  max-width: 100%;
+  height: auto !important;
+}
+
+.w9-pdf-controls {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 16px;
+  padding: 16px;
+  background: white;
+  border-top: 1px solid var(--w9-border-color);
+}
+
+.w9-pdf-nav-btn {
+  padding: 8px 16px;
+  background: var(--w9-primary-color);
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+  font-family: var(--w9-font-family);
+}
+
+.w9-pdf-nav-btn:hover:not(:disabled) {
+  background: var(--w9-primary-hover);
+}
+
+.w9-pdf-nav-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.w9-pdf-page-info {
+  font-size: 14px;
+  color: var(--w9-text-color);
+  font-weight: 500;
+}
+
+.w9-preview-frame {
+  width: 100%;
+  height: 500px;
+  border: none;
+  display: block;
+}
+
+.w9-preview-fallback {
+  height: 500px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  padding: 40px;
+  text-align: center;
+}
+
+.w9-preview-fallback p {
+  margin: 8px 0;
+  color: var(--w9-text-muted);
+}
+
+.w9-preview-placeholder {
+  height: 500px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+}
+
+.w9-preview-fallback-message {
+  text-align: center;
+  padding: 12px;
+  background: #f1f5f9;
+  border-radius: var(--w9-border-radius);
+  margin-bottom: 24px;
+  font-size: 14px;
+  color: var(--w9-text-muted);
+}
+
+.w9-preview-fallback-message p {
+  margin: 0;
+}
+
+.w9-link-btn {
+  background: none;
+  border: none;
+  color: var(--w9-primary-color);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: inherit;
+  font-family: inherit;
+  padding: 0;
+  margin-left: 4px;
+}
+
+.w9-link-btn:hover {
+  color: var(--w9-primary-hover);
+}
+
+.w9-preview-summary {
+  background: #f8fafc;
+  padding: 20px;
+  border-radius: var(--w9-border-radius);
+  margin-bottom: 24px;
+}
+
+.w9-preview-summary h3 {
+  font-size: 14px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: var(--w9-text-muted);
+  margin: 0 0 16px 0;
+}
+
+.w9-summary-grid {
+  display: grid;
+  gap: 12px;
+}
+
+.w9-summary-item {
+  display: flex;
+  gap: 8px;
+}
+
+.w9-summary-label {
+  font-weight: 600;
+  color: var(--w9-text-color);
+  min-width: 80px;
+}
+
+.w9-summary-value {
+  color: var(--w9-text-muted);
+}
+
+.w9-preview-actions {
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.w9-btn-download {
+  flex: 1;
+  justify-content: center;
+}
+
+/* ============================================
+   Loading & Status States
+   ============================================ */
+.w9-preview-loading,
+.w9-preview-error,
+.w9-preview-success {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  text-align: center;
+}
+
+.w9-spinner {
+  width: 48px;
+  height: 48px;
+  border: 4px solid var(--w9-border-color);
+  border-top-color: var(--w9-primary-color);
+  border-radius: 50%;
+  animation: w9-spin 1s linear infinite;
+  margin-bottom: 16px;
+}
+
+.w9-btn-spinner {
+  width: 16px;
+  height: 16px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-top-color: white;
+  border-radius: 50%;
+  animation: w9-spin 0.8s linear infinite;
+}
+
+@keyframes w9-spin {
+  to { transform: rotate(360deg); }
+}
+
+.w9-error-icon,
+.w9-success-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.w9-success-icon {
+  width: 64px;
+  height: 64px;
+  background: var(--w9-success-color);
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 32px;
+}
+
+.w9-preview-error h3,
+.w9-preview-success h3 {
+  margin: 0 0 8px 0;
+  font-size: 20px;
+}
+
+.w9-preview-error p,
+.w9-preview-success p {
+  color: var(--w9-text-muted);
+  margin: 0 0 24px 0;
+}
+
+/* ============================================
+   Responsive Design
+   ============================================ */
+@media (max-width: 640px) {
+  .w9-widget {
+    padding: 16px;
+    border-radius: 0;
+  }
+
+  .w9-progress {
+    padding: 0;
+  }
+
+  .w9-progress-label {
+    display: none;
+  }
+
+  .w9-progress-step:not(:last-child)::after {
+    left: 55%;
+    width: 90%;
+  }
+
+  .w9-form-row {
+    flex-direction: column;
+    gap: 0;
+  }
+
+  .w9-form-group-half,
+  .w9-form-group-quarter {
+    flex: none;
+    width: 100%;
+  }
+
+  .w9-tin-toggle {
+    flex-direction: column;
+  }
+
+  .w9-radio-group-horizontal {
+    flex-direction: column;
+  }
+
+  .w9-signature-mode-toggle {
+    flex-direction: column;
+  }
+
+  .w9-navigation {
+    flex-direction: column-reverse;
+    gap: 12px;
+  }
+
+  .w9-btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .w9-preview-actions {
+    flex-direction: column-reverse;
+  }
+
+  .w9-preview-frame {
+    height: 400px;
+  }
+}
+
+/* ============================================
+   Account Type Selection
+   ============================================ */
+.account-type-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin: 20px 0;
+}
+
+.account-type-card {
+  border: 2px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  padding: 16px;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+}
+
+.account-type-card:hover {
+  border-color: var(--w9-primary-color);
+  box-shadow: var(--w9-shadow);
+}
+
+.account-type-card.selected {
+  border-color: var(--w9-primary-color);
+  background: rgba(247, 161, 26, 0.05);
+  box-shadow: var(--w9-shadow);
+}
+
+.account-type-radio {
+  padding-top: 2px;
+}
+
+.account-type-radio input[type="radio"] {
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+  accent-color: var(--w9-primary-color);
+}
+
+.account-type-content {
+  flex: 1;
+}
+
+.account-type-content label {
+  cursor: pointer;
+  display: block;
+  margin-bottom: 4px;
+  color: var(--w9-text-color);
+  font-size: 16px;
+}
+
+.account-type-description {
+  margin: 0;
+  color: var(--w9-text-muted);
+  font-size: 14px;
+  line-height: 1.4;
+}
+
+.section-description {
+  color: var(--w9-text-muted);
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+/* Info box for custodian address display */
+.info-box {
+  background: rgba(247, 161, 26, 0.05);
+  border: 1px solid rgba(247, 161, 26, 0.2);
+  border-radius: var(--w9-border-radius);
+  padding: 12px 16px;
+  margin: 16px 0;
+}
+
+.info-box strong {
+  color: var(--w9-text-color);
+  display: block;
+  margin-bottom: 8px;
+}
+
+.info-box p {
+  margin: 0;
+  color: var(--w9-text-muted);
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+/* Form sections */
+.form-section {
+  margin-bottom: 24px;
+}
+
+.form-section h3 {
+  color: var(--w9-text-color);
+  font-size: 18px;
+  margin: 0 0 16px 0;
+}
+
+.form-group {
+  margin-bottom: 16px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 6px;
+  color: var(--w9-text-color);
+  font-weight: 500;
+  font-size: 14px;
+}
+
+.form-group input,
+.form-group select {
+  width: 100%;
+  padding: 10px 12px;
+  border: 1px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  font-size: 14px;
+  font-family: var(--w9-font-family);
+  color: var(--w9-text-color);
+  transition: border-color 0.2s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--w9-primary-color);
+}
+
+.form-group input.error,
+.form-group select.error {
+  border-color: var(--w9-error-color);
+}
+
+.form-row {
+  display: flex;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.help-text {
+  margin-top: 6px;
+  color: var(--w9-text-muted);
+  font-size: 13px;
+  line-height: 1.4;
+}
+
+.error-message {
+  color: var(--w9-error-color);
+  font-size: 13px;
+  margin-top: 4px;
+  display: block;
+}
+
+.required {
+  color: var(--w9-error-color);
+}
+
+/* ============================================
+   IRA EIN Emphasized Notice
+   ============================================ */
+.w9-ira-ein-notice {
+  display: flex;
+  gap: 12px;
+  background: linear-gradient(135deg, rgba(247, 161, 26, 0.12) 0%, rgba(247, 161, 26, 0.06) 100%);
+  border: 2px solid var(--w9-primary-color);
+  border-radius: var(--w9-border-radius);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.w9-ira-ein-icon {
+  font-size: 24px;
+  flex-shrink: 0;
+}
+
+.w9-ira-ein-content {
+  flex: 1;
+  font-size: 14px;
+  color: var(--w9-text-color);
+  line-height: 1.5;
+}
+
+.w9-ira-ein-content strong {
+  color: var(--w9-secondary-color);
+}
+
+.w9-ira-ein-list {
+  margin: 10px 0 0 0;
+  padding-left: 20px;
+}
+
+.w9-ira-ein-list li {
+  margin-bottom: 4px;
+  color: var(--w9-text-muted);
+}
+
+.w9-ira-ein-list li strong {
+  color: var(--w9-error-color);
+}
+
+.w9-ira-ein-video {
+  margin-top: 12px;
+}
+
+.w9-ira-ein-video-label {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--w9-text-color);
+  margin-bottom: 8px;
+}
+
+.w9-ira-ein-video-wrapper {
+  position: relative;
+  padding-bottom: 56.25%;
+  height: 0;
+  overflow: hidden;
+  border-radius: 8px;
+  border: 1px solid var(--w9-border-color);
+}
+
+.w9-input-ira-ein {
+  border: 2px solid var(--w9-primary-color) !important;
+  background: rgba(247, 161, 26, 0.03);
+}
+
+/* ============================================
+   Trust TIN Emphasized Notice
+   ============================================ */
+.w9-trust-tin-notice {
+  background: linear-gradient(135deg, rgba(247, 161, 26, 0.12) 0%, rgba(247, 161, 26, 0.06) 100%);
+  border: 2px solid var(--w9-primary-color);
+  border-radius: var(--w9-border-radius);
+  padding: 20px;
+  margin-bottom: 24px;
+}
+
+.w9-trust-tin-question {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.w9-trust-tin-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+}
+
+.w9-trust-tin-text {
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--w9-text-color);
+  line-height: 1.4;
+}
+
+.w9-trust-tin-help {
+  margin: 0;
+  font-size: 14px;
+  color: var(--w9-text-muted);
+  padding-left: 40px;
+}
+
+/* ============================================
+   LLC Type Selection
+   ============================================ */
+.w9-llc-type-question {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.w9-llc-type-icon {
+  font-size: 32px;
+}
+
+.w9-llc-type-text {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--w9-text-color);
+}
+
+.w9-llc-tin-notice {
+  background: rgba(247, 161, 26, 0.08);
+  border: 1px solid rgba(247, 161, 26, 0.3);
+  border-radius: var(--w9-border-radius);
+  padding: 16px;
+  margin-bottom: 20px;
+}
+
+.w9-llc-tin-notice p {
+  margin: 0;
+  font-size: 14px;
+  color: var(--w9-text-color);
+  line-height: 1.5;
+}
