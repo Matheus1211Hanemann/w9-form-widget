@@ -1151,3 +1151,123 @@
   color: var(--w9-text-color);
   line-height: 1.5;
 }
+
+/* ============================================
+   Accreditation Choice Screen
+   ============================================ */
+.accreditation-choice {
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+.accreditation-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+
+.accreditation-icon {
+  font-size: 48px;
+  margin-bottom: 12px;
+}
+
+.accreditation-header h2 {
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0 0 12px 0;
+  color: var(--w9-text-color);
+}
+
+.accreditation-header p {
+  color: var(--w9-text-muted);
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.accreditation-options {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 16px;
+  margin-bottom: 24px;
+}
+
+.accreditation-card {
+  border: 2px solid var(--w9-border-color);
+  border-radius: var(--w9-border-radius);
+  padding: 24px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  background: white;
+  text-align: center;
+}
+
+.accreditation-card:hover {
+  border-color: var(--w9-primary-color);
+  box-shadow: var(--w9-shadow-lg);
+  transform: translateY(-2px);
+}
+
+.accreditation-card-icon {
+  font-size: 40px;
+  margin-bottom: 12px;
+}
+
+.accreditation-card h3 {
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0 0 8px 0;
+  color: var(--w9-text-color);
+}
+
+.accreditation-card p {
+  color: var(--w9-text-muted);
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0 0 16px 0;
+}
+
+.accreditation-card-action {
+  display: inline-block;
+  color: var(--w9-primary-color);
+  font-weight: 600;
+  font-size: 14px;
+}
+
+.accreditation-download-notice {
+  background: rgba(55, 202, 55, 0.08);
+  border: 1px solid rgba(55, 202, 55, 0.3);
+  border-radius: var(--w9-border-radius);
+  padding: 14px 20px;
+  font-size: 14px;
+  color: var(--w9-text-color);
+  margin-bottom: 24px;
+  text-align: center;
+}
+
+.accreditation-footer {
+  text-align: center;
+  padding-top: 16px;
+  border-top: 1px solid var(--w9-border-color);
+}
+
+.w9-btn-link {
+  background: none;
+  border: none;
+  color: var(--w9-text-muted);
+  font-size: 14px;
+  font-family: inherit;
+  cursor: pointer;
+  text-decoration: underline;
+  padding: 8px 16px;
+  transition: color 0.2s;
+}
+
+.w9-btn-link:hover {
+  color: var(--w9-primary-color);
+}
+
+@media (max-width: 640px) {
+  .accreditation-options {
+    grid-template-columns: 1fr;
+  }
+}

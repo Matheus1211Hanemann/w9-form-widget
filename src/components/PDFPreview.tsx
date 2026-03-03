@@ -13,9 +13,10 @@ interface PDFPreviewProps {
   investorId: string | null;
   investorName: string;
   storageKey: string;
+  onAccreditation: () => void;
 }
 
-export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey }) => {
+export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey, onAccreditation }) => {
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -78,7 +79,6 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
     }
   };
 
-  const handleStartNew = () => { setDownloadComplete(false); onEdit(); window.location.reload(); };
   const handleOpenInNewTab = () => { if (pdfBlobUrl) window.open(pdfBlobUrl, '_blank'); };
 
   if (isGenerating) {
@@ -88,7 +88,7 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
     return (<div className="w9-preview"><div className="w9-preview-error"><div className="w9-error-icon">⚠️</div><h3>Error Generating PDF</h3><p>{error}</p><div className="w9-preview-actions"><button className="w9-btn w9-btn-secondary" onClick={onEdit}>← Go Back & Edit</button><button className="w9-btn w9-btn-primary" onClick={generatePreview}>Try Again</button></div></div></div>);
   }
   if (downloadComplete) {
-    return (<div className="w9-preview"><div className="w9-preview-success"><div className="w9-success-icon">✓</div><h3>Submission Complete!</h3><p>Your W-9 form has been submitted and downloaded successfully.</p><div className="w9-preview-actions"><button className="w9-btn w9-btn-secondary" onClick={handleDownload}>Download Again</button><button className="w9-btn w9-btn-primary" onClick={handleStartNew}>Fill Out Another Form</button></div></div></div>);
+    return (<div className="w9-preview"><div className="w9-preview-success"><div className="w9-success-icon">✓</div><h3>Submission Complete!</h3><p>Your W-9 form has been submitted and downloaded successfully.</p><div className="w9-preview-actions"><button className="w9-btn w9-btn-secondary" onClick={handleDownload}>Download Again</button><button className="w9-btn w9-btn-primary" onClick={onAccreditation}>Continue to Accreditation →</button></div></div></div>);
   }
 
   return (

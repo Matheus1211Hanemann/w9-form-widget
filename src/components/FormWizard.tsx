@@ -14,6 +14,7 @@ import { StepTaxClassification } from './StepTaxClassification';
 import { StepAddressTIN } from './StepAddressTIN';
 import { StepSignature } from './StepSignature';
 import { PDFPreview } from './PDFPreview';
+import { AccreditationChoice } from './AccreditationChoice';
 import {
   getInvestorEmailFromUrl,
   getInvestorNameFromUrl,
@@ -56,6 +57,7 @@ export const FormWizard: React.FC = () => {
   const [errors, setErrors] = useState<ValidationErrors>({});
   const [showPreview, setShowPreview] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [showAccreditation, setShowAccreditation] = useState(false);
   const hasNotifiedOpened = useRef(false);
 
   // Auto-set tax classification based on account type
@@ -193,6 +195,14 @@ export const FormWizard: React.FC = () => {
     }
   };
 
+  if (showAccreditation) {
+    return (
+      <AccreditationChoice
+        onDone={() => { window.location.reload(); }}
+      />
+    );
+  }
+
   if (showPreview) {
     return (
       <PDFPreview
@@ -203,6 +213,7 @@ export const FormWizard: React.FC = () => {
         investorId={investorId}
         investorName={investorName}
         storageKey={storageKey}
+        onAccreditation={() => setShowAccreditation(true)}
       />
     );
   }
