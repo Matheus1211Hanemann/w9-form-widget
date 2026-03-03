@@ -21,7 +21,7 @@ export const AccreditationChoice: React.FC = () => {
     <div className="w9-widget">
       <div className="w9-logo">
         <img
-          src="https://assets.cdn.filesafe.space/hX83Iw1k4t1OkxxBWMGa/media/682cd4db7ae79b622bda02e9.png"
+          src="https://cs3teste.web.app/images/logo_cs3_white.png"
           alt="CS3 Investments"
           style={{ maxWidth: '200px' }}
         />
