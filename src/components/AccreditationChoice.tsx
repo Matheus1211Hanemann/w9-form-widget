@@ -1,10 +1,6 @@
 import React, { useState } from 'react';
 
-interface AccreditationChoiceProps {
-  onDone: () => void;
-}
-
-export const AccreditationChoice: React.FC<AccreditationChoiceProps> = ({ onDone }) => {
+export const AccreditationChoice: React.FC = () => {
   const [downloaded, setDownloaded] = useState(false);
 
   const handleDownload = () => {
@@ -68,12 +64,6 @@ export const AccreditationChoice: React.FC<AccreditationChoiceProps> = ({ onDone
             ✅ Letter downloaded! Send it to your attorney, CPA, or financial advisor to complete.
           </div>
         )}
-
-        <div className="accreditation-footer">
-          <button type="button" className="w9-btn-link" onClick={onDone}>
-            Skip for now
-          </button>
-        </div>
       </div>
     </div>
   );

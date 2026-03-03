@@ -197,9 +197,7 @@ export const FormWizard: React.FC = () => {
 
   if (showAccreditation) {
     return (
-      <AccreditationChoice
-        onDone={() => { window.location.reload(); }}
-      />
+      <AccreditationChoice />
     );
   }
 
