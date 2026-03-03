@@ -48,7 +48,7 @@ jobs:
               body {
                 margin: 0;
                 padding: 40px 20px;
-                background: #f1f5f9;
+                background: linear-gradient(to bottom, #0F1926, #1C2E47);
                 min-height: 100vh;
               }
             </style>
