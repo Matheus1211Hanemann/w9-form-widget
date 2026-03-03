@@ -4,7 +4,7 @@ import cors from 'cors';
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-const BASE_FORM_URL = process.env.FORM_BASE_URL || 'http://localhost:3000/';
+const BASE_FORM_URL = process.env.FORM_BASE_URL || 'https://matheus1211hanemann.github.io/w9-form-widget/';
 const RESEND_API_KEY = process.env.RESEND_API_KEY || '';
 
 app.use(cors({
@@ -24,7 +24,7 @@ app.get('/health', (req, res) => {
 // Debug endpoint
 app.get('/debug/config', (req, res) => {
   res.json({
-    RESEND_API_KEY: RESEND_API_KEY ? `set (${RESEND_API_KEY.substring(0, 6)}...)` : 'missing',
+    RESEND_API_KEY: RESEND_API_KEY ? `✓ set (${RESEND_API_KEY.substring(0, 6)}...)` : '✗ missing',
     PORT,
   });
 });
@@ -80,7 +80,7 @@ app.post('/api/send-w9-email', async (req, res) => {
       body: JSON.stringify({
         from: fromAddress,
         to: recipientEmails,
-        subject: `W9 Form Submitted - ${submitterName || 'Anonymous'}`,
+        subject: `W9 Form Submitted – ${submitterName || 'Anonymous'}`,
         html: `
           <h2>New W9 Form Submission</h2>
           <p><strong>Submitted by:</strong> ${submitterName || 'Anonymous'}</p>
