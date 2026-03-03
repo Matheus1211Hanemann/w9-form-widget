@@ -63,7 +63,7 @@ export const StepSignature: React.FC<StepSignatureProps> = ({ formData, updateFo
           <p>Under penalties of perjury, I certify that:</p>
           <ol>
             <li>The number shown on this form is my correct taxpayer identification number, and</li>
-            <li>I am not subject to backup withholding because: (a) I am exempt from backup withholding, or (b) I have not been notified by the IRS that I am subject to backup withholding as a result of a failure to report all interest or dividends, or (c) the IRS has notified me that I am no longer subject to backup withholding, and</li>
+            <li>I am not subject to backup withholding because: (a) I am exempt from backup withholding, or (b) I have not been notified by the Internal Revenue Service (IRS) that I am subject to backup withholding as a result of a failure to report all interest or dividends, or (c) the IRS has notified me that I am no longer subject to backup withholding, and</li>
             <li>I am a U.S. citizen or other U.S. person, and</li>
             <li>The FATCA code(s) entered on this form (if any) indicating that I am exempt from FATCA reporting is correct.</li>
           </ol>
@@ -73,8 +73,8 @@ export const StepSignature: React.FC<StepSignatureProps> = ({ formData, updateFo
       <div className="w9-form-group">
         <label className="w9-label">Signature Type</label>
         <div className="w9-signature-mode-toggle">
-          <button type="button" className={`w9-mode-btn ${signatureMode === 'drawn' ? 'active' : ''}`} onClick={() => handleModeChange('drawn')}>Draw Signature</button>
-          <button type="button" className={`w9-mode-btn ${signatureMode === 'typed' ? 'active' : ''}`} onClick={() => handleModeChange('typed')}>Type Signature</button>
+          <button type="button" className={`w9-mode-btn ${signatureMode === 'drawn' ? 'active' : ''}`} onClick={() => handleModeChange('drawn')}>✍️ Draw Signature</button>
+          <button type="button" className={`w9-mode-btn ${signatureMode === 'typed' ? 'active' : ''}`} onClick={() => handleModeChange('typed')}>⌨️ Type Signature</button>
         </div>
       </div>
 

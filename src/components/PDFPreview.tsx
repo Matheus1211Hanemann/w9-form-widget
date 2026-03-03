@@ -56,13 +56,11 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
       if (!completionSent.current) {
         completionSent.current = true;
         try {
-          const id = investorId || formData.name || 'anonymous';
-          const name = investorName || formData.name || 'Anonymous';
-          if (!hasBeenCompleted(id)) {
-            markAsCompleted(id);
+          if (investorId && !hasBeenCompleted(investorId)) {
+            markAsCompleted(investorId);
+            await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
           }
-          await notifyFormCompleted(id, name, formData as any, pdfBytes);
-          const submitterName = formData.name || name;
+          const submitterName = formData.name || investorName || 'Anonymous';
           const emailSent = await sendW9Email(submitterName, formData as any, pdfBytes);
           if (!emailSent) {
             setEmailError('Failed to send email. The form was downloaded but the email could not be sent.');
@@ -87,10 +85,10 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
     return (<div className="w9-preview"><div className="w9-preview-loading"><div className="w9-spinner"></div><p>Generating your W-9 document...</p></div></div>);
   }
   if (error) {
-    return (<div className="w9-preview"><div className="w9-preview-error"><div className="w9-error-icon">Warning</div><h3>Error Generating PDF</h3><p>{error}</p><div className="w9-preview-actions"><button className="w9-btn w9-btn-secondary" onClick={onEdit}>Go Back and Edit</button><button className="w9-btn w9-btn-primary" onClick={generatePreview}>Try Again</button></div></div></div>);
+    return (<div className="w9-preview"><div className="w9-preview-error"><div className="w9-error-icon">⚠️</div><h3>Error Generating PDF</h3><p>{error}</p><div className="w9-preview-actions"><button className="w9-btn w9-btn-secondary" onClick={onEdit}>← Go Back & Edit</button><button className="w9-btn w9-btn-primary" onClick={generatePreview}>Try Again</button></div></div></div>);
   }
   if (downloadComplete) {
-    return (<div className="w9-preview"><div className="w9-preview-success"><div className="w9-success-icon">Done</div><h3>Submission Complete!</h3><p>Your W-9 form has been submitted and downloaded successfully.</p><div className="w9-preview-actions"><button className="w9-btn w9-btn-secondary" onClick={handleDownload}>Download Again</button><button className="w9-btn w9-btn-primary" onClick={handleStartNew}>Fill Out Another Form</button></div></div></div>);
+    return (<div className="w9-preview"><div className="w9-preview-success"><div className="w9-success-icon">✓</div><h3>Submission Complete!</h3><p>Your W-9 form has been submitted and downloaded successfully.</p><div className="w9-preview-actions"><button className="w9-btn w9-btn-secondary" onClick={handleDownload}>Download Again</button><button className="w9-btn w9-btn-primary" onClick={handleStartNew}>Fill Out Another Form</button></div></div></div>);
   }
 
   return (
@@ -106,10 +104,10 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
         </div>
       </div>
       <div className="w9-preview-actions">
-        <button className="w9-btn w9-btn-secondary" onClick={onEdit}>Go Back and Edit</button>
-        <button className="w9-btn w9-btn-primary" onClick={handleOpenInNewTab}>Review PDF</button>
+        <button className="w9-btn w9-btn-secondary" onClick={onEdit}>← Go Back & Edit</button>
+        <button className="w9-btn w9-btn-primary" onClick={handleOpenInNewTab}>📄 Review PDF</button>
         <button className="w9-btn w9-btn-primary w9-btn-download" onClick={handleDownload} disabled={isDownloading}>
-          {isDownloading ? 'Completing...' : 'Complete and Download'}
+          {isDownloading ? (<><span className="w9-btn-spinner"></span> Completing...</>) : (<>✅ Complete & Download</>)}
         </button>
       </div>
       {emailError && <div className="w9-error" style={{ marginTop: '12px' }}>{emailError}</div>}
