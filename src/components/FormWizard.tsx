@@ -28,11 +28,6 @@ import {
   hasBeenStarted,
   markAsStarted,
 } from '../services/trackingService';
-import {
-  notifyFormOpened,
-  notifyFormStarted,
-  notifyFormProgress,
-} from '../services/webhookService';
 
 export const FormWizard: React.FC = () => {
   const investorId = getInvestorEmailFromUrl();
@@ -90,13 +85,12 @@ export const FormWizard: React.FC = () => {
     }
   }, [formData.accountType, formData.llcType]);
 
-  // Webhook: form.opened
+  // Track form opened (no webhook)
   useEffect(() => {
     if (isTracked && investorId && !hasNotifiedOpened.current) {
       hasNotifiedOpened.current = true;
       if (!hasBeenOpened(investorId)) {
         markAsOpened(investorId);
-        notifyFormOpened(investorId, investorName);
       }
     }
   }, []);
@@ -159,9 +153,7 @@ export const FormWizard: React.FC = () => {
       if (isTracked && investorId) {
         if (currentStep === 0 && !hasBeenStarted(investorId)) {
           markAsStarted(investorId);
-          notifyFormStarted(investorId, investorName);
         }
-        notifyFormProgress(investorId, investorName, nextStep, visibleSteps.length, visibleSteps[nextStep].title);
       }
     } else {
       setShowPreview(true);
