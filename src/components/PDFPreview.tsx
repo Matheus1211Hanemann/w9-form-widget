@@ -85,7 +85,6 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
     }
   };
 
-  const handleOpenInNewTab = () => { if (pdfBlobUrl) window.open(pdfBlobUrl, '_blank'); };
 
   if (isGenerating) {
     return (<div className="w9-preview"><div className="w9-preview-loading"><div className="w9-spinner"></div><p>Generating your W-9 document...</p></div></div>);
