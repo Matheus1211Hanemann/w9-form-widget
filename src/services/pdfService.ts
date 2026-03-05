@@ -286,11 +286,11 @@ export async function generateFilledW9PDF(formData: W9FormData): Promise<Uint8Ar
   console.log(`PDF dimensions: ${width} x ${height}`);
   
   const signatureFieldX = 140;
-  const signatureFieldY = 205;
+  const signatureFieldY = 195;
   const signatureFieldWidth = 300;
 
   const dateFieldX = 418;
-  const dateFieldY = 205;
+  const dateFieldY = 195;
 
   if (formData.signature) {
     if (formData.signatureType === 'drawn') {
