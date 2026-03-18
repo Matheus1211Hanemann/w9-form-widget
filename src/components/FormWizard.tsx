@@ -15,6 +15,7 @@ import { StepAddressTIN } from './StepAddressTIN';
 import { StepSignature } from './StepSignature';
 import { PDFPreview } from './PDFPreview';
 import { AccreditationChoice } from './AccreditationChoice';
+import { StepSubAgreement } from './StepSubAgreement';
 import {
   getInvestorEmailFromUrl,
   getInvestorNameFromUrl,
@@ -53,6 +54,7 @@ export const FormWizard: React.FC = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAccreditation, setShowAccreditation] = useState(false);
+  const [subAgreementUrl, setSubAgreementUrl] = useState<string | null>(null);
   const hasNotifiedOpened = useRef(false);
 
   // Auto-set tax classification based on account type
@@ -188,8 +190,16 @@ export const FormWizard: React.FC = () => {
   };
 
   if (showAccreditation) {
+    return <AccreditationChoice />;
+  }
+
+  if (subAgreementUrl) {
     return (
-      <AccreditationChoice />
+      <StepSubAgreement
+        signingUrl={subAgreementUrl}
+        investorName={investorName}
+        onContinue={() => { setSubAgreementUrl(null); setShowAccreditation(true); }}
+      />
     );
   }
 
@@ -204,6 +214,7 @@ export const FormWizard: React.FC = () => {
         investorName={investorName}
         storageKey={storageKey}
         onAccreditation={() => setShowAccreditation(true)}
+        onSubAgreement={(url) => setSubAgreementUrl(url)}
       />
     );
   }

@@ -4,3 +4,4 @@ export { StepAddressTIN } from './StepAddressTIN';
 export { StepSignature } from './StepSignature';
 export { FormWizard } from './FormWizard';
 export { PDFPreview } from './PDFPreview';
+export { StepSubAgreement } from './StepSubAgreement';

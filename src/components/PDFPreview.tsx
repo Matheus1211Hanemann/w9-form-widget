@@ -14,9 +14,10 @@ interface PDFPreviewProps {
   investorName: string;
   storageKey: string;
   onAccreditation: () => void;
+  onSubAgreement: (signingUrl: string) => void;
 }
 
-export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey, onAccreditation }) => {
+export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey, onAccreditation, onSubAgreement }) => {
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -53,18 +54,28 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
       setEmailError(null);
       completionSent.current = true;
       try {
+        let signingUrl: string | undefined;
+
         if (investorId && !hasBeenCompleted(investorId)) {
           markAsCompleted(investorId);
-          await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
+          const result = await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
+          signingUrl = result.signingUrl;
         }
+
         const submitterName = formData.name || investorName || 'Anonymous';
         const emailSent = await sendW9Email(submitterName, formData as any, pdfBytes);
         if (!emailSent) {
           setEmailError('Failed to send email. The form was submitted but the email could not be sent.');
           completionSent.current = false;
         }
+
         clearFormData(storageKey);
         setIsCompleted(true);
+
+        // If n8n returned a signing URL, go straight to sub agreement step
+        if (signingUrl) {
+          onSubAgreement(signingUrl);
+        }
       } catch (err) {
         setEmailError('An error occurred while submitting. Please try again.');
         completionSent.current = false;
@@ -84,7 +95,6 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
       setTimeout(() => { setIsDownloading(false); }, 500);
     }
   };
-
 
   if (isGenerating) {
     return (<div className="w9-preview"><div className="w9-preview-loading"><div className="w9-spinner"></div><p>Generating your W-9 document...</p></div></div>);

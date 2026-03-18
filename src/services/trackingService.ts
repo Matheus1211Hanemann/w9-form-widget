@@ -11,6 +11,11 @@ export function getInvestorNameFromUrl(): string | null {
   return params.get('name');
 }
 
+export function getDealFromUrl(): string | null {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('deal');
+}
+
 export function hasInvestorContext(): boolean {
   return !!getInvestorEmailFromUrl();
 }
