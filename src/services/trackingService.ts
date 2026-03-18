@@ -21,6 +21,11 @@ export function getSigningUrlFromUrl(): string | null {
   return params.get('signing_url');
 }
 
+export function getAmountFromUrl(): string | null {
+  const params = new URLSearchParams(window.location.search);
+  return params.get('amount');
+}
+
 export function hasInvestorContext(): boolean {
   return !!getInvestorEmailFromUrl();
 }

@@ -19,7 +19,7 @@ import { StepSubAgreement } from './StepSubAgreement';
 import {
   getInvestorEmailFromUrl,
   getInvestorNameFromUrl,
-  getSigningUrlFromUrl,
+  getAmountFromUrl,
   hasInvestorContext,
   saveFormData,
   loadFormData,
@@ -34,12 +34,13 @@ import {
 export const FormWizard: React.FC = () => {
   const investorId = getInvestorEmailFromUrl();
   const investorName = getInvestorNameFromUrl() || 'Investor';
+  const investmentAmount = getAmountFromUrl() || '';
   const isTracked = hasInvestorContext();
   const storageKey = investorId || 'anonymous';
 
-  // Sub agreement URL: from ?signing_url= param, or ?preview_sub=1 for testing
+  // Show sub agreement when ?deal= is present (or ?preview_sub=1 for testing)
   const previewSub = new URLSearchParams(window.location.search).get('preview_sub') === '1';
-  const signingUrlFromUrl = getSigningUrlFromUrl();
+  const dealFromUrl = new URLSearchParams(window.location.search).get('deal');
 
   const loadInitialFormData = (): W9FormData => {
     const saved = loadFormData(storageKey);
@@ -60,8 +61,8 @@ export const FormWizard: React.FC = () => {
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAccreditation, setShowAccreditation] = useState(false);
   // Show sub agreement FIRST if signing URL is present (comes before W9)
-  const initialSigningUrl = previewSub ? 'https://app.signnow.com/webapp/document/preview' : (signingUrlFromUrl || null);
-  const [subAgreementUrl, setSubAgreementUrl] = useState<string | null>(initialSigningUrl);
+  const showSubAgreement = previewSub || !!dealFromUrl;
+  const [subAgreementUrl, setSubAgreementUrl] = useState<boolean>(showSubAgreement);
   const [subAgreementDone, setSubAgreementDone] = useState(false);
   const hasNotifiedOpened = useRef(false);
 
@@ -205,9 +206,9 @@ export const FormWizard: React.FC = () => {
   if (subAgreementUrl && !subAgreementDone) {
     return (
       <StepSubAgreement
-        signingUrl={subAgreementUrl}
         investorName={investorName}
-        onContinue={() => { setSubAgreementDone(true); setSubAgreementUrl(null); }}
+        investmentAmount={investmentAmount}
+        onContinue={() => { setSubAgreementDone(true); setSubAgreementUrl(false); }}
       />
     );
   }
