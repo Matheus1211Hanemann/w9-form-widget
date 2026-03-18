@@ -100,7 +100,12 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
 
       const pdfBytes = await generateSubAgreementPDF(formData);
       const pdfHash = await hashPDF(pdfBytes);
-      const pdfBase64 = btoa(String.fromCharCode(...pdfBytes));
+      let binary = '';
+      const chunkSize = 8192;
+      for (let i = 0; i < pdfBytes.length; i += chunkSize) {
+        binary += String.fromCharCode(...pdfBytes.subarray(i, i + chunkSize));
+      }
+      const pdfBase64 = btoa(binary);
 
       // Send to n8n for Drive upload + audit log
       const webhookUrl = import.meta.env.VITE_N8N_SUB_AGREEMENT_WEBHOOK_URL || import.meta.env.VITE_N8N_WEBHOOK_URL || '';
