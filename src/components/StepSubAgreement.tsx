@@ -98,7 +98,7 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
         signedAt: new Date().toISOString(),
       };
 
-      const pdfBytes = await generateSubAgreementPDF(formData);
+      const pdfBytes = await generateSubAgreementPDF(formData).catch(e => { throw new Error('PDF generation failed: ' + e.message); });
       const pdfHash = await hashPDF(pdfBytes);
       let binary = '';
       const chunkSize = 8192;
