@@ -225,14 +225,31 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
   if (phase === 'review') return card(
     <>
       <div style={{ marginBottom: '16px' }}>
-        <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '700', margin: '0 0 4px' }}>Step 2: Review Your Agreement</h2>
-        <p style={{ color: '#aaa', fontSize: '13px', margin: 0 }}>
-          Please read the full document before signing. You can also{' '}
-          <a href={SUB_AGREEMENT_PDF_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#FFA100', textDecoration: 'none' }}>
-            open it in a new tab
-          </a>
-          .
-        </p>
+        <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '700', margin: '0 0 12px' }}>Step 2: Review Your Agreement</h2>
+        <div style={{ background: '#1C2E47', borderRadius: '8px', padding: '12px 16px', marginBottom: '12px', display: 'flex', alignItems: 'flex-start', gap: '10px' }}>
+          <span style={{ fontSize: '18px', flexShrink: 0 }}>💡</span>
+          <p style={{ color: '#ccc', fontSize: '13px', lineHeight: '1.6', margin: 0 }}>
+            Please read the full Subscription Agreement before signing.
+            For a better reading experience, you can{' '}
+            <a
+              href={SUB_AGREEMENT_PDF_URL}
+              download
+              style={{ color: '#FFA100', textDecoration: 'underline', fontWeight: '600' }}
+            >
+              download the document
+            </a>
+            {' '}or{' '}
+            <a
+              href={SUB_AGREEMENT_PDF_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ color: '#FFA100', textDecoration: 'underline', fontWeight: '600' }}
+            >
+              open it in a new tab
+            </a>
+            .
+          </p>
+        </div>
       </div>
 
       {/* PDF viewer */}
