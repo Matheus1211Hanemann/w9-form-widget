@@ -32,9 +32,12 @@ import {
 
 export const FormWizard: React.FC = () => {
   const investorId = getInvestorEmailFromUrl();
-  const investorName = getInvestorNameFromUrl() || 'Unknown';
+  const investorName = getInvestorNameFromUrl() || 'Investor';
   const isTracked = hasInvestorContext();
   const storageKey = investorId || 'anonymous';
+
+  // Preview mode: ?preview_sub=1 skips straight to sub agreement screen
+  const previewSub = new URLSearchParams(window.location.search).get('preview_sub') === '1';
 
   const loadInitialFormData = (): W9FormData => {
     const saved = loadFormData(storageKey);
@@ -54,7 +57,7 @@ export const FormWizard: React.FC = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAccreditation, setShowAccreditation] = useState(false);
-  const [subAgreementUrl, setSubAgreementUrl] = useState<string | null>(null);
+  const [subAgreementUrl, setSubAgreementUrl] = useState<string | null>(previewSub ? 'https://app.signnow.com/webapp/document/preview' : null);
   const hasNotifiedOpened = useRef(false);
 
   // Auto-set tax classification based on account type
