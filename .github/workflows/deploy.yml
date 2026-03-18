@@ -32,8 +32,14 @@ jobs:
         env:
           VITE_N8N_WEBHOOK_URL: ${{ secrets.N8N_WEBHOOK_URL }}
           VITE_API_URL: ${{ secrets.API_URL }}
-      - name: Copy PDF template to dist
-        run: cp "W9 Form Empty (1).pdf" dist/
+      - name: Copy PDF templates to dist
+        run: |
+          cp "W9 Form Empty (1).pdf" dist/
+          if [ -f "public/sub-agreement.pdf" ]; then
+            cp "public/sub-agreement.pdf" "dist/sub-agreement.pdf"
+          else
+            cp "W9 Form Empty (1).pdf" "dist/sub-agreement.pdf"
+          fi
       - name: Create demo page
         run: |
           cat > dist/index.html << 'EOF'

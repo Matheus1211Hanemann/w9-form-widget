@@ -122,7 +122,8 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
 
       setPhase('done');
     } catch (err) {
-      setErrorMsg(err instanceof Error ? err.message : 'Something went wrong. Please try again.');
+      const msg = err instanceof Error ? err.message : 'Something went wrong. Please try again.';
+      setErrorMsg(msg);
       setPhase('error');
     }
   };
@@ -326,7 +327,10 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
       <div style={{ fontSize: '48px', marginBottom: '12px' }}>⚠️</div>
       <h3 style={{ color: '#fff', marginBottom: '8px' }}>Something went wrong</h3>
       <p style={{ color: '#aaa', fontSize: '14px', marginBottom: '24px' }}>{errorMsg}</p>
-      <button onClick={() => setPhase('sign')} className="w9-btn w9-btn-primary">Try Again</button>
+      <div style={{ display: 'flex', gap: '12px', justifyContent: 'center' }}>
+        <button onClick={() => setPhase('sign')} className="w9-btn w9-btn-secondary">Back to Signature</button>
+        <button onClick={handleSubmit} className="w9-btn w9-btn-primary">Try Again</button>
+      </div>
     </div>
   );
 
