@@ -7,7 +7,9 @@ interface StepSubAgreementProps {
   onContinue: () => void;    // called when sub agreement is done, proceed to W9
 }
 
-type Phase = 'intro' | 'form' | 'sign' | 'submitting' | 'done' | 'error';
+type Phase = 'intro' | 'form' | 'review' | 'sign' | 'submitting' | 'done' | 'error';
+
+const SUB_AGREEMENT_PDF_URL = './sub-agreement.pdf';
 
 export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
   investorName,
@@ -17,6 +19,7 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
   const [phase, setPhase] = useState<Phase>('intro');
   const [amount, setAmount] = useState(initialAmount);
   const [confirmedName, setConfirmedName] = useState(investorName);
+  const [hasRead, setHasRead] = useState(false);
   const [signatureDataUrl, setSignatureDataUrl] = useState<string | null>(null);
   const [isDrawing, setIsDrawing] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
@@ -78,6 +81,9 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
       ctx.clearRect(0, 0, canvasRef.current.width, canvasRef.current.height);
       setSignatureDataUrl(null);
     }
+    if (phase === 'review') {
+      setHasRead(false);
+    }
   }, [phase]);
 
   // ── Submit ────────────────────────────────────────────────────────────────
@@ -128,10 +134,10 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
     </div>
   );
 
-  const card = (children: React.ReactNode) => (
+  const card = (children: React.ReactNode, wide = false) => (
     <div className="w9-widget">
       {logo}
-      <div style={{ padding: '24px 0', maxWidth: '520px', margin: '0 auto' }}>{children}</div>
+      <div style={{ padding: '24px 0', maxWidth: wide ? '720px' : '520px', margin: '0 auto' }}>{children}</div>
     </div>
   );
 
@@ -153,7 +159,7 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
           This process has <strong style={{ color: '#fff' }}>3 steps</strong> and takes about 5 minutes:
         </p>
         <ol style={{ color: '#ccc', fontSize: '13px', lineHeight: '2', paddingLeft: '20px', margin: '12px 0 0' }}>
-          <li><strong style={{ color: '#FFA100' }}>Subscription Agreement</strong> — confirm details and sign</li>
+          <li><strong style={{ color: '#FFA100' }}>Subscription Agreement</strong> — review and sign</li>
           <li><strong style={{ color: '#fff' }}>W-9 Form</strong> — fill your tax information</li>
           <li><strong style={{ color: '#fff' }}>Accredited Investor Verification</strong></li>
         </ol>
@@ -195,23 +201,76 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
       </div>
 
       <button
-        onClick={() => setPhase('sign')}
+        onClick={() => setPhase('review')}
         disabled={!confirmedName.trim() || !amount.trim()}
         className="w9-btn w9-btn-primary"
         style={{ width: '100%', fontSize: '15px', padding: '14px', justifyContent: 'center' }}
       >
-        Continue to Signature &rarr;
+        Review Document &rarr;
       </button>
     </>
+  );
+
+  // ── Review ────────────────────────────────────────────────────────────────
+  if (phase === 'review') return card(
+    <>
+      <div style={{ marginBottom: '16px' }}>
+        <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '700', margin: '0 0 4px' }}>Step 2: Review Your Agreement</h2>
+        <p style={{ color: '#aaa', fontSize: '13px', margin: 0 }}>
+          Please read the full document before signing. You can also{' '}
+          <a href={SUB_AGREEMENT_PDF_URL} target="_blank" rel="noopener noreferrer" style={{ color: '#FFA100', textDecoration: 'none' }}>
+            open it in a new tab
+          </a>
+          .
+        </p>
+      </div>
+
+      {/* PDF viewer */}
+      <div style={{ borderRadius: '8px', overflow: 'hidden', border: '1px solid #2a3f5f', marginBottom: '16px' }}>
+        <iframe
+          src={SUB_AGREEMENT_PDF_URL}
+          title="Subscription Agreement"
+          style={{ width: '100%', height: '500px', border: 'none', display: 'block', background: '#fff' }}
+        />
+      </div>
+
+      {/* Checkbox confirmation */}
+      <label style={{ display: 'flex', alignItems: 'flex-start', gap: '10px', cursor: 'pointer', marginBottom: '24px' }}>
+        <input
+          type="checkbox"
+          checked={hasRead}
+          onChange={e => setHasRead(e.target.checked)}
+          style={{ marginTop: '2px', accentColor: '#FFA100', width: '16px', height: '16px', flexShrink: 0 }}
+        />
+        <span style={{ color: '#ccc', fontSize: '13px', lineHeight: '1.6' }}>
+          I have read and understood the Subscription Agreement and agree to its terms.
+        </span>
+      </label>
+
+      <div style={{ display: 'flex', gap: '12px' }}>
+        <button onClick={() => setPhase('form')} className="w9-btn w9-btn-secondary" style={{ flex: 1 }}>
+          &larr; Back
+        </button>
+        <button
+          onClick={() => setPhase('sign')}
+          disabled={!hasRead}
+          className="w9-btn w9-btn-primary"
+          style={{ flex: 2, fontSize: '15px', justifyContent: 'center' }}
+        >
+          Proceed to Sign &rarr;
+        </button>
+      </div>
+    </>,
+    true // wide layout for PDF
   );
 
   // ── Sign ──────────────────────────────────────────────────────────────────
   if (phase === 'sign') return card(
     <>
       <div style={{ marginBottom: '20px' }}>
-        <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '700', margin: '0 0 4px' }}>Sign Your Agreement</h2>
+        <h2 style={{ color: '#fff', fontSize: '18px', fontWeight: '700', margin: '0 0 4px' }}>Step 3: Sign Your Agreement</h2>
         <p style={{ color: '#aaa', fontSize: '13px', margin: 0 }}>
-          Draw your signature below. By signing, you agree to the terms of the Subscription Agreement.
+          Draw your signature below. By signing, you confirm you have read and agree to the terms.
         </p>
       </div>
 
@@ -238,7 +297,7 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
       </div>
 
       <div style={{ display: 'flex', gap: '12px' }}>
-        <button onClick={() => setPhase('form')} className="w9-btn w9-btn-secondary" style={{ flex: 1 }}>
+        <button onClick={() => setPhase('review')} className="w9-btn w9-btn-secondary" style={{ flex: 1 }}>
           &larr; Back
         </button>
         <button
