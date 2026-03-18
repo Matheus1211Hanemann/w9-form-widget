@@ -107,22 +107,26 @@ export const StepSubAgreement: React.FC<StepSubAgreementProps> = ({
       }
       const pdfBase64 = btoa(binary);
 
-      // Send to n8n for Drive upload + audit log
-      const webhookUrl = import.meta.env.VITE_N8N_SUB_AGREEMENT_WEBHOOK_URL || import.meta.env.VITE_N8N_WEBHOOK_URL || '';
+      // Send to n8n for Drive upload + audit log (non-blocking — signing is valid regardless)
+      const webhookUrl = import.meta.env.VITE_N8N_SUB_AGREEMENT_WEBHOOK_URL || '';
       if (webhookUrl) {
-        await fetch(webhookUrl, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            event: 'sub_agreement.signed',
-            timestamp: formData.signedAt,
-            investor: { name: confirmedName, email: new URLSearchParams(window.location.search).get('email') || '' },
-            deal: new URLSearchParams(window.location.search).get('deal') || '',
-            investmentAmount: amount,
-            pdfHash,
-            pdf: { base64: pdfBase64, filename: `${confirmedName.replace(/[^a-zA-Z0-9]/g, '_')}_SubAgreement.pdf` },
-          }),
-        });
+        try {
+          await fetch(webhookUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({
+              event: 'sub_agreement.signed',
+              timestamp: formData.signedAt,
+              investor: { name: confirmedName, email: new URLSearchParams(window.location.search).get('email') || '' },
+              deal: new URLSearchParams(window.location.search).get('deal') || '',
+              investmentAmount: amount,
+              pdfHash,
+              pdf: { base64: pdfBase64, filename: `${confirmedName.replace(/[^a-zA-Z0-9]/g, '_')}_SubAgreement.pdf` },
+            }),
+          });
+        } catch (webhookErr) {
+          console.warn('Audit trail webhook failed (non-fatal):', webhookErr);
+        }
       }
 
       setPhase('done');
