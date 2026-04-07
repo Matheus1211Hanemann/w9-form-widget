@@ -14,10 +14,9 @@ interface PDFPreviewProps {
   investorName: string;
   storageKey: string;
   onAccreditation: () => void;
-  onSubAgreement: (signingUrl: string) => void;
 }
 
-export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey, onAccreditation, onSubAgreement }) => {
+export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey, onAccreditation }) => {
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
@@ -54,12 +53,9 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
       setEmailError(null);
       completionSent.current = true;
       try {
-        let signingUrl: string | undefined;
-
         if (investorId && !hasBeenCompleted(investorId)) {
           markAsCompleted(investorId);
-          const result = await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
-          signingUrl = result.signingUrl;
+          await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
         }
 
         const submitterName = formData.name || investorName || 'Anonymous';
@@ -71,11 +67,6 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
 
         clearFormData(storageKey);
         setIsCompleted(true);
-
-        // If n8n returned a signing URL, go straight to sub agreement step
-        if (signingUrl) {
-          onSubAgreement(signingUrl);
-        }
       } catch (err) {
         setEmailError('An error occurred while submitting. Please try again.');
         completionSent.current = false;

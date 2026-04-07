@@ -15,11 +15,9 @@ import { StepAddressTIN } from './StepAddressTIN';
 import { StepSignature } from './StepSignature';
 import { PDFPreview } from './PDFPreview';
 import { AccreditationChoice } from './AccreditationChoice';
-import { StepSubAgreement } from './StepSubAgreement';
 import {
   getInvestorEmailFromUrl,
   getInvestorNameFromUrl,
-  getAmountFromUrl,
   hasInvestorContext,
   saveFormData,
   loadFormData,
@@ -34,13 +32,8 @@ import {
 export const FormWizard: React.FC = () => {
   const investorId = getInvestorEmailFromUrl();
   const investorName = getInvestorNameFromUrl() || 'Investor';
-  const investmentAmount = getAmountFromUrl() || '';
   const isTracked = hasInvestorContext();
   const storageKey = investorId || 'anonymous';
-
-  // Show sub agreement when ?deal= is present (or ?preview_sub=1 for testing)
-  const previewSub = new URLSearchParams(window.location.search).get('preview_sub') === '1';
-  const dealFromUrl = new URLSearchParams(window.location.search).get('deal');
 
   const loadInitialFormData = (): W9FormData => {
     const saved = loadFormData(storageKey);
@@ -60,10 +53,6 @@ export const FormWizard: React.FC = () => {
   const [showPreview, setShowPreview] = useState(false);
   const [isGenerating, setIsGenerating] = useState(false);
   const [showAccreditation, setShowAccreditation] = useState(false);
-  // Show sub agreement FIRST if signing URL is present (comes before W9)
-  const showSubAgreement = previewSub || !!dealFromUrl;
-  const [subAgreementUrl, setSubAgreementUrl] = useState<boolean>(showSubAgreement);
-  const [subAgreementDone, setSubAgreementDone] = useState(false);
   const hasNotifiedOpened = useRef(false);
 
   // Auto-set tax classification based on account type
@@ -202,17 +191,6 @@ export const FormWizard: React.FC = () => {
     return <AccreditationChoice />;
   }
 
-  // Sub agreement BEFORE W9: shown if signing URL present and not yet done
-  if (subAgreementUrl && !subAgreementDone) {
-    return (
-      <StepSubAgreement
-        investorName={investorName}
-        investmentAmount={investmentAmount}
-        onContinue={() => { setSubAgreementDone(true); setSubAgreementUrl(false); }}
-      />
-    );
-  }
-
   if (showPreview) {
     return (
       <PDFPreview
@@ -224,7 +202,6 @@ export const FormWizard: React.FC = () => {
         investorName={investorName}
         storageKey={storageKey}
         onAccreditation={() => setShowAccreditation(true)}
-        onSubAgreement={() => {}}
       />
     );
   }

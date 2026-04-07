@@ -1,5 +1,3 @@
-import { getDealFromUrl } from './trackingService';
-
 const N8N_WEBHOOK_URL = import.meta.env.VITE_N8N_WEBHOOK_URL || '';
 
 export type WebhookEvent = 'form.opened' | 'form.started' | 'form.progress' | 'form.completed';
@@ -9,7 +7,6 @@ export interface WebhookPayload {
   timestamp: string;
   investor: { email: string; name: string; };
   formLink: string;
-  deal?: string;
   progress?: { currentStep: number; totalSteps: number; stepName: string; percentComplete: number; };
   formData?: Record<string, any>;
   pdf?: { base64: string; filename: string; };
@@ -17,7 +14,6 @@ export interface WebhookPayload {
 
 export interface WebhookCompletedResult {
   success: boolean;
-  signingUrl?: string;
 }
 
 function buildFormLink(email: string, name: string): string {
@@ -50,7 +46,6 @@ export function notifyFormProgress(investorEmail: string, investorName: string, 
   fireWebhook({ event: 'form.progress', timestamp: new Date().toISOString(), investor: { email: investorEmail, name: investorName }, formLink: buildFormLink(investorEmail, investorName), progress: { currentStep, totalSteps, stepName, percentComplete: Math.round((currentStep / totalSteps) * 100) } });
 }
 
-// Returns success + optional signingUrl if n8n generated a subscription agreement invite
 export async function notifyFormCompleted(investorEmail: string, investorName: string, formData: Record<string, any>, pdfBytes: Uint8Array): Promise<WebhookCompletedResult> {
   if (!N8N_WEBHOOK_URL) {
     console.warn('[Webhook] No n8n webhook URL configured.');
@@ -64,13 +59,11 @@ export async function notifyFormCompleted(investorEmail: string, investorName: s
   const safeFormData = { ...formData };
   delete safeFormData.ssn; delete safeFormData.ein; delete safeFormData.iraEin; delete safeFormData.signature;
 
-  const deal = getDealFromUrl();
   const payload: WebhookPayload = {
     event: 'form.completed',
     timestamp: new Date().toISOString(),
     investor: { email: investorEmail, name: investorName },
     formLink: buildFormLink(investorEmail, investorName),
-    ...(deal ? { deal } : {}),
     formData: safeFormData,
     pdf: { base64, filename },
   };
@@ -85,12 +78,7 @@ export async function notifyFormCompleted(investorEmail: string, investorName: s
       console.error(`[Webhook] n8n responded with ${response.status}`);
       return { success: false };
     }
-    try {
-      const data = await response.json();
-      return { success: true, signingUrl: data?.signingUrl };
-    } catch {
-      return { success: true };
-    }
+    return { success: true };
   } catch (err) {
     console.error('[Webhook] Failed:', err);
     return { success: false };
