@@ -2,7 +2,6 @@ import React, { useEffect, useState, useRef } from 'react';
 import { W9FormData } from '../types';
 import { generateFilledW9PDF, downloadPDF } from '../services/pdfService';
 import { notifyFormCompleted } from '../services/webhookService';
-import { sendW9Email } from '../services/emailService';
 import { markAsCompleted, hasBeenCompleted, clearFormData } from '../services/trackingService';
 
 interface PDFPreviewProps {
@@ -56,13 +55,6 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
         if (investorId && !hasBeenCompleted(investorId)) {
           markAsCompleted(investorId);
           await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
-        }
-
-        const submitterName = formData.name || investorName || 'Anonymous';
-        const emailSent = await sendW9Email(submitterName, formData as any, pdfBytes);
-        if (!emailSent) {
-          setEmailError('Failed to send email. The form was submitted but the email could not be sent.');
-          completionSent.current = false;
         }
 
         clearFormData(storageKey);
