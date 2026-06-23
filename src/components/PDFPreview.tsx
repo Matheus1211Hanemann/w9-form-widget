@@ -52,11 +52,23 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
       setEmailError(null);
       completionSent.current = true;
       try {
+        // Submit and REQUIRE a successful result before claiming success.
+        // If already submitted successfully before, treat as done (don't re-send).
+        let result = { success: true };
         if (investorId && !hasBeenCompleted(investorId)) {
-          markAsCompleted(investorId);
-          await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
+          result = await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
         }
 
+        if (!result || result.success !== true) {
+          // The submission did NOT go through. Surface a real error, allow a
+          // retry, and do NOT mark completed (so the next attempt re-sends).
+          setEmailError('We could not submit your W-9. Please check your connection and try again.');
+          completionSent.current = false;
+          return;
+        }
+
+        // Confirmed delivered — now it's safe to mark completed, clear, and show success.
+        if (investorId) markAsCompleted(investorId);
         clearFormData(storageKey);
         setIsCompleted(true);
       } catch (err) {
