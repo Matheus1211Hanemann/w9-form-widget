@@ -2,7 +2,7 @@ import React, { useEffect, useState, useRef } from 'react';
 import { W9FormData } from '../types';
 import { generateFilledW9PDF, downloadPDF } from '../services/pdfService';
 import { notifyFormCompleted } from '../services/webhookService';
-import { markAsCompleted, hasBeenCompleted, clearFormData } from '../services/trackingService';
+import { markAsCompleted, clearFormData } from '../services/trackingService';
 
 interface PDFPreviewProps {
   formData: W9FormData;
@@ -52,12 +52,19 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
       setEmailError(null);
       completionSent.current = true;
       try {
-        // Submit and REQUIRE a successful result before claiming success.
-        // If already submitted successfully before, treat as done (don't re-send).
-        let result = { success: true };
-        if (investorId && !hasBeenCompleted(investorId)) {
-          result = await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
+        // A link without ?email= has no investor context — we cannot attribute
+        // or store the submission. Block instead of showing a false success.
+        if (!investorId) {
+          setEmailError('This form link is missing your investor info. Please use the exact link we emailed you, or contact us at matheus@cs3investments.com.');
+          completionSent.current = false;
+          return;
         }
+
+        // Always submit. Do NOT gate on a local "already completed" flag: the
+        // old version set that flag BEFORE the send succeeded, so a stale flag
+        // could skip a real submission and silently lose the W-9. The receiver
+        // overwrites the record and de-dups the admin notice, so re-sending is safe.
+        const result = await notifyFormCompleted(investorId, investorName, formData as any, pdfBytes);
 
         if (!result || result.success !== true) {
           // The submission did NOT go through. Surface a real error, allow a
