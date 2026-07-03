@@ -15,6 +15,23 @@ interface PDFPreviewProps {
   onAccreditation: () => void;
 }
 
+// Guard against empty / state-lost submissions: a W-9 with no account type,
+// name, address, TIN or signature must NOT be generated or sent (it produces a
+// blank form). Returns the human-readable list of what's missing.
+function missingRequiredFields(f: W9FormData): string[] {
+  const has = (v?: string) => !!(v && v.trim());
+  const m: string[] = [];
+  if (!f.accountType) m.push('account type');
+  if (!has(f.name) && !has(f.businessName)) m.push('name');
+  if (!has(f.address)) m.push('street address');
+  if (!has(f.city)) m.push('city');
+  if (!has(f.state)) m.push('state');
+  if (!has(f.zipCode)) m.push('ZIP code');
+  if (!(has(f.ssn) || has(f.ein) || has(f.iraEin))) m.push(f.tinType === 'ein' ? 'EIN' : 'SSN');
+  if (!has(f.signature)) m.push('signature');
+  return m;
+}
+
 export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey, onAccreditation }) => {
   const [pdfBytes, setPdfBytes] = useState<Uint8Array | null>(null);
   const [pdfBlobUrl, setPdfBlobUrl] = useState<string | null>(null);
@@ -33,6 +50,14 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
   const generatePreview = async () => {
     setIsGenerating(true);
     setError(null);
+    // Block a blank/partial form before generating anything (e.g. if the form
+    // state was lost). Shows what's missing + a "Go Back & Edit" button.
+    const missing = missingRequiredFields(formData);
+    if (missing.length) {
+      setError(`Your form is missing: ${missing.join(', ')}. Please go back and fill in all required fields before submitting.`);
+      setIsGenerating(false);
+      return;
+    }
     try {
       const bytes = await generateFilledW9PDF(formData);
       setPdfBytes(bytes);
@@ -56,6 +81,14 @@ export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGene
         // or store the submission. Block instead of showing a false success.
         if (!investorId) {
           setEmailError('This form link is missing your investor info. Please use the exact link we emailed you, or contact us at matheus@cs3investments.com.');
+          completionSent.current = false;
+          return;
+        }
+
+        // Never submit a blank/partial W-9 (prevents empty forms reaching us).
+        const missing = missingRequiredFields(formData);
+        if (missing.length) {
+          setEmailError(`Your form is missing: ${missing.join(', ')}. Please click "Go Back & Edit" and complete all fields before submitting.`);
           completionSent.current = false;
           return;
         }
