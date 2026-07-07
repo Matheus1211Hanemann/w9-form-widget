@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef } from 'react';
-import { W9FormData } from '../types';
+import { W9FormData, validateStep } from '../types';
 import { generateFilledW9PDF, downloadPDF } from '../services/pdfService';
 import { notifyFormCompleted } from '../services/webhookService';
 import { markAsCompleted, clearFormData } from '../services/trackingService';
@@ -16,20 +16,23 @@ interface PDFPreviewProps {
 }
 
 // Guard against empty / state-lost submissions: a W-9 with no account type,
-// name, address, TIN or signature must NOT be generated or sent (it produces a
-// blank form). Returns the human-readable list of what's missing.
+// name, TIN or signature must NOT be generated or sent (it produces a blank
+// form — the Jeff Davis case). Delegates to the wizard's own `validateStep` for
+// EVERY step so the required-field set is exactly account-type-aware (e.g. an
+// IRA correctly needs iraEin, NOT a personal address — the address fields are
+// hidden for IRA, which uses the custodian's address). Returns friendly labels.
+const FIELD_LABELS: Record<string, string> = {
+  accountType: 'account type', custodian: 'custodian', custodianName: 'custodian name',
+  custodianAddress: 'custodian address', custodianCity: 'custodian city', custodianState: 'custodian state',
+  custodianZip: 'custodian ZIP', iraAccountNumber: 'IRA account number', name: 'name', businessName: 'business name',
+  taxClassification: 'tax classification', llcClassification: 'LLC tax classification', otherDescription: 'entity description',
+  address: 'street address', city: 'city', state: 'state', zipCode: 'ZIP code', ssn: 'SSN', ein: 'EIN', iraEin: 'IRA EIN',
+  signature: 'signature', signatureDate: 'date', llcType: 'LLC type',
+};
 function missingRequiredFields(f: W9FormData): string[] {
-  const has = (v?: string) => !!(v && v.trim());
-  const m: string[] = [];
-  if (!f.accountType) m.push('account type');
-  if (!has(f.name) && !has(f.businessName)) m.push('name');
-  if (!has(f.address)) m.push('street address');
-  if (!has(f.city)) m.push('city');
-  if (!has(f.state)) m.push('state');
-  if (!has(f.zipCode)) m.push('ZIP code');
-  if (!(has(f.ssn) || has(f.ein) || has(f.iraEin))) m.push(f.tinType === 'ein' ? 'EIN' : 'SSN');
-  if (!has(f.signature)) m.push('signature');
-  return m;
+  const errs: Record<string, string> = {};
+  for (let step = 0; step <= 6; step++) Object.assign(errs, validateStep(step, f));
+  return [...new Set(Object.keys(errs).map(k => FIELD_LABELS[k] || k))];
 }
 
 export const PDFPreview: React.FC<PDFPreviewProps> = ({ formData, onEdit, isGenerating, setIsGenerating, investorId, investorName, storageKey, onAccreditation }) => {
